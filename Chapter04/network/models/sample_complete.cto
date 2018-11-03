@@ -1,0 +1,118 @@
+/**
+ * Zero To Blockchain multi-party finance network
+ */
+namespace org.acme.Z2BTestNetwork
+import composer.base.*
+import composer.events.*
+/**
+ * The types of animals that could be moved
+ */
+enum AnimalType {
+  o COW
+}
+
+/**
+ * The movement status for an animal
+ */
+enum MovementStatus {
+  o IN_FIELD
+  o IN_TRANSIT
+  o REGISTERED
+}
+
+/**
+ * The production type associated with an animal
+ */
+enum ProductionType {
+  o MEAT
+}
+
+/**
+ * A Farmer participant
+ */
+abstract participant User identified by email {
+  o String email
+  o String firstName
+  o String lastName
+}
+
+
+participant Farmer identified by farmerID extends User{
+    o String address1
+    o String address2
+    o String county
+    o String postcode
+    --> Business business optional
+}
+participant Fsvo identified by fsvoID extends User{
+    o String fsvoID
+}
+participant Vet identified by vetID extends User {
+    o String vetID
+}
+participant Transporter identified by transporterID extends User {
+    o String transporterID
+}
+participant Slaughter identified by slaughterID extends User {
+    o String slaughterID
+}
+
+/**
+ * A Field asset. A Field is related to a list of animals
+ */
+asset Field identified by cph {
+  o String cph
+  o String name
+  --> Business business
+}
+
+/**
+ * An Animal asset, which is related to a Field
+ */
+asset Animal identified by animalId {
+    o String animalId
+    o AnimalType species
+    //o RegistrationStatus registrationStatus
+    o MovementStatus movementStatus
+    o ProductionType productionType
+    --> Field location optional
+    --> Farmer owner
+}
+
+/**
+ * A Business asset which is owned by a Farmer, is related to a list of fields
+ * and has a list of incoming animals.
+ */
+asset Business identified by sbi {
+     o String sbi
+     o String address1
+     o String address2
+     o String county
+     o String postcode
+     --> Farmer owner
+     --> Animal[] incomingAnimals optional
+}
+
+/**
+ * An abstract transaction type for animal movements
+ */
+abstract transaction AnimalMovement {
+  o String[] logs optional
+    --> Animal animal
+    --> Business from
+    --> Business to
+}
+
+/**
+ * A transaction type for an animal leaving a farm
+ */
+transaction AnimalMovementDeparture extends AnimalMovement {
+  --> Field fromField
+}
+
+/**
+ * A transaction type for an animal arriving at a field
+ */
+transaction AnimalMovementArrival extends AnimalMovement {
+  --> Field arrivalField
+}
