@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/rddill-IBM/ZeroToBlockchain"
+    "url": "https://github.com/haren1903/ZeroToBlockchain"
   },
   "keywords": [
     "zero",
@@ -30,7 +30,7 @@
     "composer",
     "hyperledger"
   ],
-  "author": "Bob Dill, IBM Distinguished Engineer",
+  "author": "Harun Uslu, FHNW",
   "license": "Apache-2.0",
   "devDependencies": {
     "browserfs": "^1.2.0",
